@@ -58,7 +58,6 @@ class ArticleController extends Controller
             $article->load('category');  
         }
 
-        // Retourner la vue avec les articles
         return view('index', compact('articles'));
     }
     public function show($id)
@@ -69,7 +68,6 @@ class ArticleController extends Controller
         // Charger la catégorie associée à l'article
         $article->load('category');
 
-        // Retourner la vue avec l'article
         return view('show', compact('article'));
     }
      // Ajouter un article aux favoris
@@ -139,37 +137,5 @@ class ArticleController extends Controller
 
 
     return redirect()->back();
-}
-
-
-
-private function generateMenu()
-{
-    $path = public_path('assets/csv/menu.csv');
-    $menu = [];
-    if (!File::exists($path)) {
-        dd("Le fichier CSV n'existe pas : " . $path);
-    }
-
-
-
-    if (File::exists($path)) {
-        $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        foreach ($lines as $line) {
-            $parts = explode('|', $line);
-            $menu[] = [
-                'text' => trim($parts[0]),
-                'link' => trim($parts[1]),
-            ];
-        }
-    }
-  
-    return $menu;
-}
-public function showMenu()
-{
-
-    $menu = $this->generateMenu();  dd($menu);
-    return view('index',compact('menu')); // Passer le menu à la vue
 }
 }
