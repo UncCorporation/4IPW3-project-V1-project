@@ -14,49 +14,47 @@ class ArticleController extends Controller
     //
     public function index(Request $request)
     {
-        // Nom de la catégorie à filtrer
-        $categoryName = "On n'est pas des pigeons"; 
+        // Start with a base query
+        $query = Article::query();
 
-        // Récupérer la catégorie "On n'est pas des pigeons"
-        $category = \App\Models\Category::where('name_cat', $categoryName)->first();
-
-        if (!$category) {
-            dd("La catégorie 'On n'est pas des pigeons' n'existe pas.");
+        // Handle category filter
+        if ($request->filled('category')) {
+            // If a specific category is selected
+            $query->where('fk_category_art', $request->category);
+        } else {
+            // Default to "On n'est pas des pigeons" category
+            $category = \App\Models\Category::where('name_cat', "On n'est pas des pigeons")->first();
+            if ($category) {
+                $query->where('fk_category_art', $category->id_cat);
+            }
         }
 
-         // Récupérer les paramètres de recherche
-        $keyword = $request->input('keyword');
-        // Récupération des paramètres de date
-        $dateMin = $request->input('date_min');
-        $dateMax = $request->input('date_max');
-
-        // Construction de la requête
-        $query = Article::where('fk_category_art', $category->id_cat);
-    // Ajouter une condition pour la recherche par mot-clé dans le titre, l'accroche ou le contenu
-    if ($keyword) {
-        $query->where(function($q) use ($keyword) {
-            $q->where('title_art', 'like', '%' . $keyword . '%')
-              ->orWhere('hook_art', 'like', '%' . $keyword . '%')
-              ->orWhere('content_art', 'like', '%' . $keyword . '%');
-        });
-    }
-
-        // Filtrer par date si nécessaire
-        if ($dateMin) {
-            $query->where('date_art', '>=', $dateMin);
+        // Handle existing keyword search
+        if ($request->filled('keyword')) {
+            $keyword = $request->keyword;
+            $query->where(function($q) use ($keyword) {
+                $q->where('title_art', 'like', '%' . $keyword . '%')
+                  ->orWhere('hook_art', 'like', '%' . $keyword . '%')
+                  ->orWhere('content_art', 'like', '%' . $keyword . '%');
+            });
         }
 
-        if ($dateMax) {
-            $query->where('date_art', '<=', $dateMax);
+        // Handle existing date filters
+        if ($request->filled('date_min')) {
+            $query->where('date_art', '>=', $request->date_min);
         }
 
-        // Récupérer les articles triés par date et limités à 10 résultats
-        $articles = $query->orderBy('date_art', 'desc')->take(10)->get();
-
-        // Charger la catégorie pour chaque article
-        foreach ($articles as $article) {
-            $article->load('category');  
+        if ($request->filled('date_max')) {
+            $query->where('date_art', '<=', $request->date_max);
         }
+
+        // Get the filtered articles
+        $articles = $query->orderBy('date_art', 'desc')
+                         ->take(10)
+                         ->get();
+
+        // Load the category relationship for each article
+        $articles->load('category');
 
         return view('index', compact('articles'));
     }

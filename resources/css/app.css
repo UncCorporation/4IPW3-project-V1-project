@@ -1,3 +1,192 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Side Menus Base Styles */
+.side-menu {
+    position: fixed;
+    top: 0;
+    height: 100vh;
+    width: 18%;
+    min-width: 250px;
+    background-color: #ffffff;
+    padding: 20px;
+    overflow-y: auto;
+    margin-top: 60px; /* Adjust to match your navbar height */
+    transition: all 0.3s ease;
+}
+
+.left-menu {
+    left: 0;
+    border-right: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.right-menu {
+    right: 0;
+    border-left: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* Menu Sections */
+.menu-section {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.menu-section h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+/* Form Elements */
+.custom-select {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 8px 12px;
+    transition: all 0.2s ease;
+}
+
+.custom-select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+.search-input-group {
+    position: relative;
+}
+
+.search-input-group input {
+    padding-right: 40px;
+    border-radius: 8px;
+}
+
+.search-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6b7280;
+}
+
+/* Reading Time Cards */
+.reading-time-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.reading-time-card {
+    background: #f8fafc;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.reading-time-card:hover {
+    background: #f1f5f9;
+    transform: translateX(2px);
+}
+
+.reading-time-card a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    padding: 12px;
+}
+
+.reading-time-content h4 {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #1e293b;
+    margin-bottom: 6px;
+}
+
+.reading-time-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+/* Color Options */
+.color-options {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.color-option {
+    position: relative;
+}
+
+.color-option input[type="radio"] {
+    display: none;
+}
+
+.color-label {
+    display: block;
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    border: 2px solid #e0e0e0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.color-option input[type="radio"]:checked + .color-label {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #2563eb;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+/* Main Content Adjustment */
+.main-content {
+    margin-left: 18%;
+    margin-right: 18%;
+    padding: 20px;
+    padding-top: 80px; /* Adjust based on navbar height */
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .side-menu {
+        width: 25%;
+    }
+    .main-content {
+        margin-left: 25%;
+        margin-right: 25%;
+    }
+}
+
+@media (max-width: 768px) {
+    .side-menu {
+        position: static;
+        width: 100%;
+        height: auto;
+        margin-top: 0;
+    }
+    .main-content {
+        margin: 0;
+        padding-top: 60px;
+    }
+}

@@ -30,6 +30,6 @@ class Article extends Model
     // Définir la relation avec la catégorie
     public function category()
     {
-        return $this->belongsTo(Category::class, 'fk_category_art');
+        return $this->belongsTo(Category::class, 'fk_category_art', 'id_cat');
     }
 }

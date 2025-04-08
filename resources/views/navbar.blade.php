@@ -1,4 +1,3 @@
-
 <nav class="navbar">
     <ul class="navbar-list">
         @if(isset($menu) && count($menu) > 0)
@@ -10,7 +9,7 @@
         @endif
         
         <!-- User greeting section -->
-        <li>
+        <li class="user-greeting">
             <div class="d-flex align-items-center">
                 @if(session('user'))
                     <span class="me-3 text-light">Bonjour, {{ session('user')['id'] }} !</span>
@@ -23,60 +22,79 @@
 </nav>
 
 <style>
-    .dropdown-menu {
-        background-color: #444; /* Couleur de fond */
-        color: white; /* Couleur du texte */
-        list-style: none;
-        padding: 10px 0;
-        margin: 0;
-        border-radius: 5px;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Ombre pour le style */
-    }
-
-    .dropdown-menu li {
-        padding: 0;
-    }
-
-    .dropdown-menu li a {
-        color: white; /* Couleur du texte */
-        text-decoration: none;
-        padding: 10px 15px;
-        display: block;
-        transition: background-color 0.3s;
-    }
-
-    .dropdown-menu li a:hover {
-        background-color: #575757; /* Couleur au survol */
-        border-radius: 5px;
-    }
-
     .navbar {
         background-color: #333;
-        padding: 10px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: var(--navbar-height, 60px);
+        z-index: 1001;
+        display: flex;
+        align-items: center;
     }
 
     .navbar-list {
         list-style: none;
         display: flex;
-        justify-content: space-around;
+        justify-content: space-between; /* Changed to space-between */
+        align-items: center;
         margin: 0;
-        padding: 0;
+        padding: 0 20px;
+        width: 100%;
+        height: 100%;
     }
 
     .navbar-list li {
-        display: inline;
-        margin-right: 20px; /* Reduced margin for better spacing */
+        display: flex;
+        align-items: center;
+        height: 100%;
+        flex: 1; /* Make items grow to fill space */
     }
 
-    .navbar-list a {
+    .navbar-list li a {
         color: white;
         text-decoration: none;
-        padding: 10px 15px;
+        padding: 0 15px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         transition: background-color 0.3s;
+        width: 100%; /* Make links fill the li width */
     }
 
-    .navbar-list a:hover {
+    .navbar-list li a:hover {
         background-color: #575757;
-        border-radius: 5px;
+    }
+
+    .user-greeting {
+        flex: 0 0 auto !important; /* Don't grow, don't shrink, auto basis */
+        margin-left: auto;
+        padding: 0 15px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .navbar {
+            height: auto;
+            position: static;
+        }
+
+        .navbar-list {
+            flex-direction: column;
+            padding: 10px;
+        }
+
+        .navbar-list li {
+            width: 100%;
+            height: 40px;
+        }
+
+        .user-greeting {
+            margin-left: 0;
+            justify-content: center;
+        }
     }
 </style>
