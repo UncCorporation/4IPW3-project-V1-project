@@ -11,8 +11,10 @@ use Illuminate\Support\Facades\File;
 
 class ArticleController extends Controller
 {
-    //
-    public function index(Request $request)
+ 
+ //affiche moi le symbole pour ouvrir commencer un commentaire sur plusieurs lignes
+    /*
+   public function index(Request $request)
     {
         // Start with a base query
         $query = Article::query();
@@ -28,7 +30,6 @@ class ArticleController extends Controller
                 $query->where('fk_category_art', $category->id_cat);
             }
         }
-
         // Handle existing keyword search
         if ($request->filled('keyword')) {
             $keyword = $request->keyword;
@@ -58,15 +59,17 @@ class ArticleController extends Controller
 
         return view('index', compact('articles'));
     }
+
+    */
+    //
+ 
+
     public function show($id)
     {
-        // Récupérer l'article à partir de son ID
-        $article = Article::findOrFail($id);  // Utilise findOrFail pour gérer les erreurs si l'article n'est pas trouvé
-        
-        // Charger la catégorie associée à l'article
+        $article = Article::findOrFail($id);
         $article->load('category');
 
-        return view('show', compact('article'));
+        return response()->json($article);
     }
      // Ajouter un article aux favoris
      public function addFavorite($id)
@@ -135,5 +138,52 @@ class ArticleController extends Controller
 
 
     return redirect()->back();
+}
+
+public function index(Request $request)
+{
+    // Start with a base query
+    $query = Article::query();
+
+    // Handle category filter
+    if ($request->filled('category')) {
+        // If a specific category is selected
+        $query->where('fk_category_art', $request->category);
+    } else {
+        // Default to "On n'est pas des pigeons" category
+        $category = \App\Models\Category::where('name_cat', "On n'est pas des pigeons")->first();
+        if ($category) {
+            $query->where('fk_category_art', $category->id_cat);
+        }
+    }
+    // Handle existing keyword search
+    if ($request->filled('keyword')) {
+        $keyword = $request->keyword;
+        $query->where(function($q) use ($keyword) {
+            $q->where('title_art', 'like', '%' . $keyword . '%')
+              ->orWhere('hook_art', 'like', '%' . $keyword . '%')
+              ->orWhere('content_art', 'like', '%' . $keyword . '%');
+        });
+    }
+
+    // Handle existing date filters
+    if ($request->filled('date_min')) {
+        $query->where('date_art', '>=', $request->date_min);
+    }
+
+    if ($request->filled('date_max')) {
+        $query->where('date_art', '<=', $request->date_max);
+    }
+
+    // Get the filtered articles
+    $articles = $query->orderBy('date_art', 'desc')
+                     ->take(10)
+                     ->get();
+
+    // Load the category relationship for each article
+    $articles->load('category');
+
+    // Return JSON response
+    return response()->json($articles);
 }
 }

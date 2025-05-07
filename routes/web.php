@@ -34,4 +34,6 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/sponsor', [SponsorController::class, 'showBanner']);
 
+Route::get('/articles', [ArticleController::class, 'index']);
+
 
